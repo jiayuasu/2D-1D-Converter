@@ -86,11 +86,11 @@ public class hilbertMarker {
     	    	{
     	    		minX=longitude;
     	    	}
-    	    	else if(longitude>maxX)
+    	    	 if(longitude>maxX)
     	    	{
     	    		maxX=longitude;
     	    	}
-    	    	else if(latitude<minY)
+    	    	 if(latitude<minY)
     	    	{
     	    		minY=latitude;
     	    	}
@@ -98,10 +98,7 @@ public class hilbertMarker {
     	    	{
     	    		maxY=latitude;
     	    	}
-    	    	else
-    	    	{
-
-    	    	}
+		counter++;
     	    }
     	    // note that Scanner suppresses exceptions
     	    if (sc.ioException() != null) {
