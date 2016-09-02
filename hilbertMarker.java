@@ -43,10 +43,9 @@ public class hilbertMarker {
 	    }
 	    return h;
 	  }
-	   static int locationMapping (double axisMin, double axisLocation,double axisMax)
+	   static int locationMapping (double axisMin, double axisLocation,double axisMax,int gridResolution)
 	  {
 		  Double gridLocation;
-		  int gridResolution=Short.MAX_VALUE;
 		  gridLocation=(axisLocation-axisMin)*gridResolution/(axisMax-axisMin);
 		  return gridLocation.intValue();
 	  }
@@ -60,7 +59,7 @@ public class hilbertMarker {
 		String inputPath=args[0];
 		String outputPath=args[1];
 		long counter=0;
-		int statusInterval=10000;
+		int statusInterval=100000;
 	/*
 	 * First round, go through the entire dataset and extract the boundary.	
 	 */
@@ -76,6 +75,13 @@ public class hilbertMarker {
     	        nextLine = sc.nextLine().split(",");
     	    	longitude=Double.parseDouble(nextLine[5]);
     	    	latitude=Double.parseDouble(nextLine[6]);
+    	    	if(counter==0)
+    	    	{
+    	    		minX=longitude;
+    	    		maxX=longitude;
+    	    		minY=latitude;
+    	    		maxY=latitude;
+    	    	}
     	    	if(longitude<minX)
     	    	{
     	    		minX=longitude;
@@ -110,7 +116,8 @@ public class hilbertMarker {
     	    }
     	}
 	    
-	    System.out.println("Found MinMax X and Y.");
+	    System.out.println("Found Min Max X and Y.");
+	    counter=0;
 	    /*
 	     * Second round, add Hilbert Curve Value
 	     */
@@ -128,9 +135,9 @@ public class hilbertMarker {
 	          nextLine = currentLine.split(",");
 	          longitude=Double.parseDouble(nextLine[5]);
 		      latitude=Double.parseDouble(nextLine[6]);
-			  int x=locationMapping(minX,maxX,longitude);
-			  int y=locationMapping(minY,maxY,latitude);
-			  int gridResolution=Short.MAX_VALUE;
+			  int gridResolution=10000000;
+			  int x=locationMapping(minX,longitude,maxY,gridResolution);
+			  int y=locationMapping(minY,latitude,maxY,gridResolution);
 			  int hValue = computeHValue(gridResolution+1,x,y);
 			  osw.write(currentLine+','+hValue+'\n');
 			  counter++;
