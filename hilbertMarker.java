@@ -2,17 +2,12 @@ package hilbertMarker;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
+
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+
 import java.util.Scanner;
 
-import com.opencsv.CSVReader;
-import com.opencsv.CSVWriter;
 
 /*
  * This file is trying to encode a large set of spatial records with hilbert curve ID. 
@@ -69,42 +64,9 @@ public class hilbertMarker {
 	/*
 	 * First round, go through the entire dataset and extract the boundary.	
 	 */
-		
-	   // CSVReader reader = new CSVReader(new FileReader(inputPath),',');
+
 	    String [] nextLine;
     	double longitude, latitude;
-    	
-    	
-    /*	
-    	
-	    while ((nextLine = reader.readNext()) != null) {
-	    	longitude=Double.parseDouble(nextLine[5]);
-	    	latitude=Double.parseDouble(nextLine[6]);
-	    	if(longitude<minX)
-	    	{
-	    		minX=longitude;
-	    	}
-	    	else if(longitude>maxX)
-	    	{
-	    		maxX=longitude;
-	    	}
-	    	else if(latitude<minY)
-	    	{
-	    		minY=latitude;
-	    	}
-	    	else if(latitude>maxY)
-	    	{
-	    		maxY=latitude;
-	    	}
-	    	else
-	    	{
-
-	    	}
-	    }
-	    */
-    	
-    	
-    	
     	FileInputStream inputStream = null;
     	Scanner sc = null;
     	try {
@@ -148,10 +110,6 @@ public class hilbertMarker {
     	    }
     	}
 	    
-	    /*
-	     * Now, we should already have a list of points as the sample set of the parent set.
-	     */
-	    //reader.close();
 	    System.out.println("Found MinMax X and Y.");
 	    /*
 	     * Second round, add Hilbert Curve Value
@@ -195,24 +153,6 @@ public class hilbertMarker {
 	            sc.close();
 	        }
 	    }
-	    /*
-	    while ((nextLine = reader.readNext()) != null) {
-	      longitude=Double.parseDouble(nextLine[5]);
-	      latitude=Double.parseDouble(nextLine[6]);
-		  int x=locationMapping(minX,maxX,longitude);
-		  int y=locationMapping(minY,maxY,latitude);
-		  int gridResolution=Short.MAX_VALUE;
-		  int hValue = computeHValue(gridResolution+1,x,y);
-		  List<String> resultLine=new ArrayList<String>(Arrays.asList(nextLine));
-		  resultLine.add(Integer.toString(hValue));
-		  writer.writeNext(resultLine.toArray(new String[resultLine.size()]));
-		  counter++;
-		  if(counter%statusInterval==0)
-		  {
-			  System.out.println("Converted " + counter + " tuples. Still working..." );  
-		  }
-	    }*/ 
-	    //reader.close();
 	    System.out.println("Finished the transformation. Converted " + counter + " tuples in total.");
 	    return;
 	}
