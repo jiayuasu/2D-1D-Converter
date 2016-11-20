@@ -1,4 +1,4 @@
-package hilbertMarker;
+
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -58,6 +58,9 @@ public class hilbertMarker {
 		double maxY=0.0;
 		String inputPath=args[0];
 		String outputPath=args[1];
+		int longitudeOffset=Integer.parseInt(args[2]);
+		int latitudeOffset=Integer.parseInt(args[3]);
+		String InplaceGeneration = args[4];
 		long counter=0;
 		int statusInterval=100000;
 	/*
@@ -73,8 +76,8 @@ public class hilbertMarker {
     	    sc = new Scanner(inputStream, "UTF-8");
     	    while (sc.hasNextLine()) {
     	        nextLine = sc.nextLine().split(",");
-    	    	longitude=Double.parseDouble(nextLine[5]);
-    	    	latitude=Double.parseDouble(nextLine[6]);
+    	    	longitude=Double.parseDouble(nextLine[longitudeOffset]);
+    	    	latitude=Double.parseDouble(nextLine[latitudeOffset]);
     	    	if(counter==0)
     	    	{
     	    		minX=longitude;
@@ -130,13 +133,30 @@ public class hilbertMarker {
 	        {
 	          String currentLine=sc.nextLine();
 	          nextLine = currentLine.split(",");
-	          longitude=Double.parseDouble(nextLine[5]);
-		      latitude=Double.parseDouble(nextLine[6]);
+	          longitude=Double.parseDouble(nextLine[longitudeOffset]);
+		      latitude=Double.parseDouble(nextLine[latitudeOffset]);
 			  int gridResolution=10000000;
 			  int x=locationMapping(minX,longitude,maxY,gridResolution);
 			  int y=locationMapping(minY,latitude,maxY,gridResolution);
 			  int hValue = computeHValue(gridResolution+1,x,y);
-			  osw.write(currentLine+','+hValue+'\n');
+			  if(InplaceGeneration.equals("true"))
+			  {
+				  String awaitLine = nextLine[0];
+				  for(int i=1;i<longitudeOffset;i++)
+				  {
+					  awaitLine=awaitLine + "," +nextLine[i];
+				  }
+				  awaitLine = awaitLine + "," +hValue;
+				  for(int i=latitudeOffset+1;i<nextLine.length;i++)
+				  {
+					  awaitLine=awaitLine+","+nextLine[i];
+				  }
+				  osw.write(awaitLine+'\n');
+			  }
+			  else
+			  {
+				  osw.write(currentLine+','+hValue+'\n');
+			  }
 			  counter++;
 			  if(counter%statusInterval==0)
 			  {
